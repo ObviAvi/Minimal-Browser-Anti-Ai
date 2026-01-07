@@ -76,7 +76,10 @@
                 </div>
             </div>
 
-            <webview id="wv" class="webview-content" src="about:blank" style="display: none;"></webview>
+            <webview id="wv" class="webview-content" src="about:blank" style="display: none;" 
+                     partition="persist:main"
+                     useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+                     webpreferences="allowRunningInsecureContent, javascript=yes, webSecurity=yes"></webview>
         </main>
     </div>
 
