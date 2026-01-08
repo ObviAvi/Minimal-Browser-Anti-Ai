@@ -1,90 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anti-AI Browser</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="browser-container">
+        <!-- Custom Title Bar -->
+        <div class="title-bar">
+            <div class="title-bar-drag"></div>
+            <div class="window-controls">
+                <button class="window-btn minimize" id="minimize-btn">─</button>
+                <button class="window-btn maximize" id="maximize-btn">□</button>
+                <button class="window-btn close" id="close-btn">×</button>
+            </div>
+        </div>
+
+        <!-- Tab Bar (Chrome-style above URL bar) -->
+        <div class="tab-bar">
+            <div class="tabs-container" id="tabs-container">
+                <!-- Tabs will be dynamically added here -->
+            </div>
+            <button class="new-tab-btn" id="new-tab-btn" title="New Tab (Ctrl+T)">+</button>
+        </div>
+
         <header class="ui-header">
             <div class="nav-controls">
-                <button class="nav-btn" id="back-btn"><span>←</span></button>
-                <button class="nav-btn" id="forward-btn"><span>→</span></button>
-                <button class="nav-btn" id="refresh-btn"><span>↻</span></button>
-                <button class="nav-btn" id="home-btn"><span>⌂</span></button>
+                <button class="nav-btn" id="back-btn" title="Go Back"><span>←</span></button>
+                <button class="nav-btn" id="forward-btn" title="Go Forward"><span>→</span></button>
+                <button class="nav-btn" id="refresh-btn" title="Refresh"><span>↻</span></button>
+                <button class="nav-btn" id="home-btn" title="Home"><span>⌂</span></button>
             </div>
-            
+
             <div class="search-bar">
                 <span class="search-icon">🔍</span>
                 <input type="text" id="url-input" placeholder="Enter URL or Search... & No AI">
+                <div class="loading-spinner" id="loading-spinner"></div>
             </div>
 
-            <div class="status-badge">
-                <span class="dot"></span> AI BLOCKED
+            <button class="nav-btn bookmark-btn" id="bookmark-btn" title="Bookmark this page">
+                <span id="bookmark-icon">☆</span>
+            </button>
+
+            <div class="status-badge" title="Blocked requests">
+                <span class="dot"></span>
+                <span id="blocked-count">0</span>&nbsp;BLOCKED
             </div>
+
+            <button class="nav-btn" id="history-btn" title="History">
+                <span>📜</span>
+            </button>
+
+            <button class="nav-btn" id="bookmarks-panel-btn" title="Bookmarks">
+                <span>📚</span>
+            </button>
 
             <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">
                 <span class="theme-icon">🌙</span>
             </button>
         </header>
 
+        <!-- Bookmarks Dropdown -->
+        <div class="dropdown-panel" id="bookmarks-panel">
+            <div class="panel-header">
+                <h3>Bookmarks</h3>
+                <button class="panel-close" id="close-bookmarks">×</button>
+            </div>
+            <div class="panel-content" id="bookmarks-list">
+                <!-- Bookmarks will be dynamically added -->
+            </div>
+        </div>
+
+        <!-- History Dropdown -->
+        <div class="dropdown-panel" id="history-panel">
+            <div class="panel-header">
+                <h3>History</h3>
+                <button class="clear-btn" id="clear-history">Clear All</button>
+                <button class="panel-close" id="close-history">×</button>
+            </div>
+            <div class="panel-content" id="history-list">
+                <!-- History will be dynamically added -->
+            </div>
+        </div>
+
         <main class="content-area">
             <div class="card-grid" id="home-view">
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                <div class="card" data-url="https://wikipedia.org">
+                    <div class="card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    </div>
                     <div class="card-content">
                         <h3>Wikipedia</h3>
                         <p>The Free Encyclopedia</p>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                <div class="card" data-url="https://github.com">
+                    <div class="card-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    </div>
                     <div class="card-content">
                         <h3>GitHub</h3>
                         <p>Where Code Lives</p>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                <div class="card" data-url="https://stackoverflow.com">
+                    <div class="card-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    </div>
                     <div class="card-content">
                         <h3>Stack Overflow</h3>
                         <p>Developer Community</p>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
+                <div class="card" data-url="https://developer.mozilla.org">
+                    <div class="card-image" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    </div>
                     <div class="card-content">
                         <h3>MDN Web Docs</h3>
                         <p>Web Development Resources</p>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                <div class="card" data-url="https://duckduckgo.com">
+                    <div class="card-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    </div>
                     <div class="card-content">
                         <h3>DuckDuckGo</h3>
                         <p>Privacy-Focused Search</p>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);"></div>
+                <div class="card" data-url="https://news.ycombinator.com">
+                    <div class="card-image" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+                    </div>
                     <div class="card-content">
                         <h3>Hacker News</h3>
                         <p>Tech News & Discussion</p>
                     </div>
                 </div>
+                <div class="card" data-url="https://youtube.com">
+                    <div class="card-image" style="background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);">
+                    </div>
+                    <div class="card-content">
+                        <h3>YouTube</h3>
+                        <p>Video Platform</p>
+                    </div>
+                </div>
+                <div class="card" data-url="https://reddit.com">
+                    <div class="card-image" style="background: linear-gradient(135deg, #ff4500 0%, #ff8717 100%);">
+                    </div>
+                    <div class="card-content">
+                        <h3>Reddit</h3>
+                        <p>Community Forums</p>
+                    </div>
+                </div>
             </div>
 
-            <webview id="wv" class="webview-content" src="about:blank" style="display: none;" 
-                     partition="persist:main"
-                     useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-                     webpreferences="allowRunningInsecureContent, javascript=yes, webSecurity=yes"></webview>
+            <div class="webviews-container" id="webviews-container">
+                <!-- Webviews will be dynamically added here -->
+            </div>
         </main>
     </div>
 
     <script>
-        const webview = document.getElementById('wv');
+        const { ipcRenderer } = require('electron');
+
+        // DOM Elements
+        const tabsContainer = document.getElementById('tabs-container');
+        const webviewsContainer = document.getElementById('webviews-container');
+        const newTabBtn = document.getElementById('new-tab-btn');
         const input = document.getElementById('url-input');
         const homeView = document.getElementById('home-view');
         const backBtn = document.getElementById('back-btn');
@@ -93,63 +176,311 @@
         const homeBtn = document.getElementById('home-btn');
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = themeToggle.querySelector('.theme-icon');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const bookmarkBtn = document.getElementById('bookmark-btn');
+        const bookmarkIcon = document.getElementById('bookmark-icon');
+        const historyBtn = document.getElementById('history-btn');
+        const bookmarksPanelBtn = document.getElementById('bookmarks-panel-btn');
+        const bookmarksPanel = document.getElementById('bookmarks-panel');
+        const historyPanel = document.getElementById('history-panel');
+        const bookmarksList = document.getElementById('bookmarks-list');
+        const historyList = document.getElementById('history-list');
+        const blockedCountEl = document.getElementById('blocked-count');
 
-        // State variables
-        let currentSearchQuery = '';
-        let isShowingSearchResults = false;
-        let lastSearchResults = null;
+        // State
+        let tabs = [];
+        let activeTabId = null;
+        let tabCounter = 0;
         let isDarkMode = localStorage.getItem('darkMode') === 'true';
+        let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+        let history = JSON.parse(localStorage.getItem('history') || '[]');
+        let blockedCount = 0;
 
-        function showWebview() {
-            homeView.style.display = 'none';
-            webview.style.display = 'flex';
+        // Window Controls
+        document.getElementById('minimize-btn').addEventListener('click', () => ipcRenderer.send('window-minimize'));
+        document.getElementById('maximize-btn').addEventListener('click', () => ipcRenderer.send('window-maximize'));
+        document.getElementById('close-btn').addEventListener('click', () => ipcRenderer.send('window-close'));
+
+        // Receive blocked counts from main process
+        ipcRenderer.on('blocked-counts', (event, counts) => {
+            blockedCount = counts.ads + counts.ai;
+            blockedCountEl.textContent = blockedCount;
+        });
+
+        // Request initial blocked counts
+        ipcRenderer.send('get-blocked-counts');
+
+        // Tab Management
+        function createTab(url = null) {
+            const tabId = `tab-${++tabCounter}`;
+
+            // Create tab element
+            const tab = document.createElement('div');
+            tab.className = 'tab';
+            tab.dataset.tabId = tabId;
+            tab.innerHTML = `
+                <img class="tab-favicon" src="" alt="">
+                <span class="tab-title">New Tab</span>
+                <button class="tab-close" title="Close Tab">×</button>
+            `;
+            tabsContainer.appendChild(tab);
+
+            // Create webview
+            const webview = document.createElement('webview');
+            webview.id = tabId;
+            webview.className = 'webview-content';
+            webview.setAttribute('partition', 'persist:main');
+            // Use latest Chrome User-Agent to pass Google's browser checks
+            webview.setAttribute('useragent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36');
+            // Enable features needed for modern web authentication (OAuth, third-party cookies, popups)
+            webview.setAttribute('webpreferences', 'allowRunningInsecureContent=no, javascript=yes, webSecurity=yes, contextIsolation=no, allowPopups=yes, nativeWindowOpen=yes');
+            webview.setAttribute('allowpopups', '');  // Allow OAuth popups
+            webview.src = url || 'about:blank';
+            webview.style.display = 'none';
+            webviewsContainer.appendChild(webview);
+
+            // Store tab data
+            const tabData = {
+                id: tabId,
+                tabElement: tab,
+                webview: webview,
+                title: 'New Tab',
+                url: url || '',
+                isHome: !url,
+                isLoading: false,
+                isSearchResults: false,
+                searchQuery: '',
+                lastSearchResults: null
+            };
+            tabs.push(tabData);
+
+            // Tab click handler
+            tab.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('tab-close')) {
+                    switchToTab(tabId);
+                }
+            });
+
+            // Tab close handler
+            tab.querySelector('.tab-close').addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeTab(tabId);
+            });
+
+            // Webview event handlers
+            setupWebviewEvents(tabData);
+
+            // Switch to new tab
+            switchToTab(tabId);
+
+            return tabData;
         }
 
-        function showHome() {
+        function setupWebviewEvents(tabData) {
+            const { webview, tabElement } = tabData;
+
+            webview.addEventListener('did-start-loading', () => {
+                tabData.isLoading = true;
+                if (tabData.id === activeTabId) {
+                    loadingSpinner.classList.add('active');
+                }
+            });
+
+            webview.addEventListener('did-stop-loading', () => {
+                tabData.isLoading = false;
+                if (tabData.id === activeTabId) {
+                    loadingSpinner.classList.remove('active');
+                }
+            });
+
+            webview.addEventListener('did-navigate', (e) => {
+                if (e.url === 'about:blank') return;
+
+                if (e.url.startsWith('data:')) {
+                    tabData.isSearchResults = true;
+                    if (tabData.id === activeTabId) {
+                        input.value = tabData.searchQuery;
+                    }
+                } else {
+                    tabData.url = e.url;
+                    tabData.isSearchResults = false;
+                    tabData.isHome = false;
+                    if (tabData.id === activeTabId) {
+                        input.value = e.url;
+                        updateBookmarkIcon();
+                    }
+                    addToHistory(e.url, tabData.title);
+                }
+            });
+
+            webview.addEventListener('did-navigate-in-page', (e) => {
+                if (!e.url.startsWith('data:') && e.url !== 'about:blank') {
+                    tabData.url = e.url;
+                    tabData.isSearchResults = false;
+                    if (tabData.id === activeTabId) {
+                        input.value = e.url;
+                        updateBookmarkIcon();
+                    }
+                }
+            });
+
+            webview.addEventListener('page-title-updated', (e) => {
+                tabData.title = e.title;
+                tabElement.querySelector('.tab-title').textContent = e.title.substring(0, 20) + (e.title.length > 20 ? '...' : '');
+            });
+
+            webview.addEventListener('page-favicon-updated', (e) => {
+                if (e.favicons && e.favicons.length > 0) {
+                    tabElement.querySelector('.tab-favicon').src = e.favicons[0];
+                }
+            });
+
+            webview.addEventListener('will-navigate', (e) => {
+                if (tabData.isSearchResults && !e.url.startsWith('data:')) {
+                    e.preventDefault();
+                    webview.src = e.url;
+                    tabData.isSearchResults = false;
+                }
+            });
+
+            webview.addEventListener('did-fail-load', (e) => {
+                if (e.errorCode !== -3) { // Ignore aborted loads
+                    console.error('Page load failed:', e.errorDescription);
+                }
+            });
+
+            // Handle new windows (OAuth popups, login dialogs, etc.)
+            webview.addEventListener('new-window', (e) => {
+                const url = e.url;
+                // For OAuth/login popups, open in the same tab instead of blocking
+                // Real browsers would open a popup, but we'll navigate in the same tab for simplicity
+                if (e.disposition === 'foreground-tab' || e.disposition === 'new-window') {
+                    webview.src = url;
+                } else {
+                    // For background tabs, create a new tab
+                    createTab(url);
+                }
+            });
+        }
+
+        function switchToTab(tabId) {
+            const prevTab = tabs.find(t => t.id === activeTabId);
+            const newTab = tabs.find(t => t.id === tabId);
+
+            if (!newTab) return;
+
+            // Update previous tab
+            if (prevTab) {
+                prevTab.tabElement.classList.remove('active');
+                prevTab.webview.style.display = 'none';
+            }
+
+            // Activate new tab
+            activeTabId = tabId;
+            newTab.tabElement.classList.add('active');
+
+            if (newTab.isHome) {
+                homeView.style.display = 'grid';
+                newTab.webview.style.display = 'none';
+                input.value = '';
+            } else {
+                homeView.style.display = 'none';
+                newTab.webview.style.display = 'flex';
+                input.value = newTab.isSearchResults ? newTab.searchQuery : newTab.url;
+            }
+
+            // Update loading state
+            if (newTab.isLoading) {
+                loadingSpinner.classList.add('active');
+            } else {
+                loadingSpinner.classList.remove('active');
+            }
+
+            updateBookmarkIcon();
+        }
+
+        function closeTab(tabId) {
+            const tabIndex = tabs.findIndex(t => t.id === tabId);
+            if (tabIndex === -1) return;
+
+            const tab = tabs[tabIndex];
+            tab.tabElement.remove();
+            tab.webview.remove();
+            tabs.splice(tabIndex, 1);
+
+            // If closing active tab, switch to another
+            if (tabId === activeTabId) {
+                if (tabs.length > 0) {
+                    const newActiveIndex = Math.min(tabIndex, tabs.length - 1);
+                    switchToTab(tabs[newActiveIndex].id);
+                } else {
+                    // No tabs left, create a new one
+                    createTab();
+                }
+            }
+        }
+
+        function getActiveTab() {
+            return tabs.find(t => t.id === activeTabId);
+        }
+
+        // Navigation functions
+        function navigateToUrl(url) {
+            const tab = getActiveTab();
+            if (!tab) return;
+
+            tab.isHome = false;
+            tab.isSearchResults = false;
+            homeView.style.display = 'none';
+            tab.webview.style.display = 'flex';
+            tab.webview.src = url;
+        }
+
+        function showHomeForTab() {
+            const tab = getActiveTab();
+            if (!tab) return;
+
+            tab.isHome = true;
+            tab.isSearchResults = false;
+            tab.searchQuery = '';
+            tab.lastSearchResults = null;
             homeView.style.display = 'grid';
-            webview.style.display = 'none';
+            tab.webview.style.display = 'none';
             input.value = '';
-            isShowingSearchResults = false;
-            lastSearchResults = null;
+            tab.tabElement.querySelector('.tab-title').textContent = 'New Tab';
+            tab.tabElement.querySelector('.tab-favicon').src = '';
         }
 
         function isURL(text) {
-            // If it has spaces, it's likely a search query
             if (/\s/.test(text)) return false;
-            
-            // If it starts with http:// or https://, it's a URL
             if (text.startsWith('http://') || text.startsWith('https://')) return true;
-            
-            // If it has a domain pattern (something.tld), it's likely a URL
             if (/\.\w{2,}/.test(text)) return true;
-            
-            // Check for localhost or IP addresses
             if (text.startsWith('localhost') || /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(text)) return true;
-            
             return false;
         }
 
         async function performSearch(query) {
-            currentSearchQuery = query;
+            const tab = getActiveTab();
+            if (!tab) return;
+
+            tab.searchQuery = query;
+
             try {
-                // Fetch DuckDuckGo HTML results
                 const response = await fetch(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`);
                 const html = await response.text();
-                
-                // Parse results from HTML
+
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
-                
+
                 const results = [];
                 const resultElements = doc.querySelectorAll('.result');
-                
+
                 resultElements.forEach(element => {
                     const titleLink = element.querySelector('.result__a');
                     const snippetEl = element.querySelector('.result__snippet');
                     const urlEl = element.querySelector('.result__url');
-                    
+
                     if (titleLink) {
-                        // Get URL - try href first, then uddg parameter, then text
                         let url = titleLink.href || '';
                         if (url.includes('uddg=')) {
                             const match = url.match(/uddg=([^&]+)/);
@@ -158,7 +489,7 @@
                         if (!url && urlEl) {
                             url = urlEl.textContent.trim();
                         }
-                        
+
                         if (url) {
                             results.push({
                                 title: titleLink.textContent.trim(),
@@ -168,22 +499,23 @@
                         }
                     }
                 });
-                
-                // Always display custom results, even if empty
+
                 displaySearchResults(query, results);
             } catch (error) {
                 console.error('Search error:', error);
-                // Show empty results instead of falling back to DuckDuckGo page
                 displaySearchResults(query, []);
             }
         }
 
         function displaySearchResults(query, results) {
-            // Store results for theme toggle
-            lastSearchResults = { query, results };
-            
+            const tab = getActiveTab();
+            if (!tab) return;
+
+            tab.lastSearchResults = { query, results };
+            tab.isSearchResults = true;
+
             const darkMode = document.body.classList.contains('dark-mode');
-            
+
             let resultsHTML = `
                 <!DOCTYPE html>
                 <html>
@@ -231,16 +563,10 @@
                         .result:nth-child(3) { animation-delay: 0.2s; }
                         .result:nth-child(4) { animation-delay: 0.25s; }
                         .result:nth-child(5) { animation-delay: 0.3s; }
-                        .result:nth-child(6) { animation-delay: 0.35s; }
-                        .result:nth-child(7) { animation-delay: 0.4s; }
-                        .result:nth-child(8) { animation-delay: 0.45s; }
                         .result:hover {
                             box-shadow: ${darkMode ? '0 8px 25px rgba(143, 211, 206, 0.2)' : '0 8px 25px rgba(0,0,0,0.12)'};
                             transform: translateY(-4px) scale(1.01);
                             border-color: #8fd3ce;
-                        }
-                        .result:active {
-                            transform: translateY(-2px) scale(1.005);
                         }
                         .result-link {
                             text-decoration: none;
@@ -252,7 +578,6 @@
                             color: ${darkMode ? '#8fd3ce' : '#1a73e8'};
                             font-weight: 500;
                             margin-bottom: 8px;
-                            transition: color 0.2s ease;
                             display: flex;
                             align-items: center;
                             gap: 10px;
@@ -318,102 +643,129 @@
                 });
             }
 
-            resultsHTML += `
-                </body>
-                </html>
-            `;
+            resultsHTML += `</body></html>`;
 
-            // Display in webview
-            webview.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent(resultsHTML));
-            showWebview();
+            tab.isHome = false;
+            homeView.style.display = 'none';
+            tab.webview.style.display = 'flex';
+            tab.webview.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent(resultsHTML));
+            tab.tabElement.querySelector('.tab-title').textContent = `Search: ${query}`;
         }
 
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                let input_value = input.value.trim();
-                if (!input_value) return;
-                
-                if (isURL(input_value)) {
-                    // It's a URL - add protocol if missing
-                    let url;
-                    if (!input_value.startsWith('http://') && !input_value.startsWith('https://')) {
-                        url = 'https://' + input_value;
-                    } else {
-                        url = input_value;
-                    }
-                    webview.src = url;
-                    showWebview();
-                } else {
-                    // It's a search query
-                    performSearch(input_value);
-                }
-            }
-        });
-
-        // Navigation controls
-        backBtn.addEventListener('click', () => {
-            // Only allow back navigation if webview is visible
-            if (webview.style.display !== 'none' && webview.canGoBack()) {
-                webview.goBack();
-            }
-        });
-
-        forwardBtn.addEventListener('click', () => {
-            // Only allow forward navigation if webview is visible
-            if (webview.style.display !== 'none' && webview.canGoForward()) {
-                webview.goForward();
-            }
-        });
-
-        refreshBtn.addEventListener('click', () => {
-            if (webview.style.display !== 'none') {
-                if (isShowingSearchResults && lastSearchResults) {
-                    // Refresh search results
-                    performSearch(lastSearchResults.query);
-                } else if (webview.src && webview.src !== 'about:blank') {
-                    webview.reload();
-                }
-            }
-        });
-
-        homeBtn.addEventListener('click', () => {
-            showHome();
-        });
-
-        // Update URL input when navigating (but not for search results page)
-        webview.addEventListener('did-navigate', (e) => {
-            // Ignore about:blank navigation
-            if (e.url === 'about:blank') {
+        // Bookmarks
+        function updateBookmarkIcon() {
+            const tab = getActiveTab();
+            if (!tab || tab.isHome || !tab.url) {
+                bookmarkIcon.textContent = '☆';
                 return;
             }
-            // If it's a data URL (our search results), keep showing the search query
-            if (e.url.startsWith('data:')) {
-                input.value = currentSearchQuery;
-                isShowingSearchResults = true;
+            const isBookmarked = bookmarks.some(b => b.url === tab.url);
+            bookmarkIcon.textContent = isBookmarked ? '★' : '☆';
+        }
+
+        function toggleBookmark() {
+            const tab = getActiveTab();
+            if (!tab || tab.isHome || !tab.url) return;
+
+            const existingIndex = bookmarks.findIndex(b => b.url === tab.url);
+            if (existingIndex >= 0) {
+                bookmarks.splice(existingIndex, 1);
             } else {
-                input.value = e.url;
-                isShowingSearchResults = false;
+                bookmarks.unshift({
+                    url: tab.url,
+                    title: tab.title || tab.url,
+                    date: new Date().toISOString()
+                });
             }
-        });
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            updateBookmarkIcon();
+            renderBookmarks();
+        }
 
-        webview.addEventListener('did-navigate-in-page', (e) => {
-            if (!e.url.startsWith('data:') && e.url !== 'about:blank') {
-                input.value = e.url;
-                isShowingSearchResults = false;
-            }
-        });
+        function renderBookmarks() {
+            bookmarksList.innerHTML = bookmarks.length === 0
+                ? '<div class="empty-message">No bookmarks yet</div>'
+                : bookmarks.map(b => `
+                    <div class="panel-item" data-url="${b.url}">
+                        <img src="https://www.google.com/s2/favicons?domain=${new URL(b.url).hostname}&sz=32" class="item-favicon" alt="">
+                        <div class="item-info">
+                            <div class="item-title">${b.title}</div>
+                            <div class="item-url">${new URL(b.url).hostname}</div>
+                        </div>
+                        <button class="item-delete" data-url="${b.url}">×</button>
+                    </div>
+                `).join('');
 
-        // Handle clicks on search results - intercept navigation from data URL
-        webview.addEventListener('will-navigate', (e) => {
-            if (isShowingSearchResults && !e.url.startsWith('data:')) {
-                // User clicked a search result, navigate to it
-                e.preventDefault();
-                webview.src = e.url;
-                isShowingSearchResults = false;
-            }
-        });
+            // Click handlers
+            bookmarksList.querySelectorAll('.panel-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('item-delete')) {
+                        navigateToUrl(item.dataset.url);
+                        bookmarksPanel.classList.remove('active');
+                    }
+                });
+            });
 
-        // Dark mode toggle
+            bookmarksList.querySelectorAll('.item-delete').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const url = btn.dataset.url;
+                    bookmarks = bookmarks.filter(b => b.url !== url);
+                    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+                    renderBookmarks();
+                    updateBookmarkIcon();
+                });
+            });
+        }
+
+        // History
+        function addToHistory(url, title) {
+            if (!url || url.startsWith('data:') || url === 'about:blank') return;
+
+            // Remove duplicate if exists
+            history = history.filter(h => h.url !== url);
+
+            // Add to front
+            history.unshift({
+                url: url,
+                title: title || url,
+                date: new Date().toISOString()
+            });
+
+            // Keep only last 100 items
+            history = history.slice(0, 100);
+            localStorage.setItem('history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            historyList.innerHTML = history.length === 0
+                ? '<div class="empty-message">No history yet</div>'
+                : history.slice(0, 50).map(h => `
+                    <div class="panel-item" data-url="${h.url}">
+                        <img src="https://www.google.com/s2/favicons?domain=${new URL(h.url).hostname}&sz=32" class="item-favicon" alt="">
+                        <div class="item-info">
+                            <div class="item-title">${h.title}</div>
+                            <div class="item-url">${new URL(h.url).hostname}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+            historyList.querySelectorAll('.panel-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    navigateToUrl(item.dataset.url);
+                    historyPanel.classList.remove('active');
+                });
+            });
+        }
+
+        function clearHistory() {
+            history = [];
+            localStorage.setItem('history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        // Theme
         function applyTheme(dark) {
             if (dark) {
                 document.body.classList.add('dark-mode');
@@ -423,39 +775,149 @@
                 themeIcon.textContent = '🌙';
             }
             localStorage.setItem('darkMode', dark);
-            
-            // Only regenerate search results if we're actually viewing them
-            if (isShowingSearchResults && lastSearchResults && webview.style.display !== 'none') {
-                displaySearchResults(lastSearchResults.query, lastSearchResults.results);
+
+            const tab = getActiveTab();
+            if (tab && tab.isSearchResults && tab.lastSearchResults) {
+                displaySearchResults(tab.lastSearchResults.query, tab.lastSearchResults.results);
             }
         }
 
-        // Apply saved theme on load
-        applyTheme(isDarkMode);
+        // Event Listeners
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                let inputValue = input.value.trim();
+                if (!inputValue) return;
+
+                if (isURL(inputValue)) {
+                    let url = inputValue;
+                    if (!inputValue.startsWith('http://') && !inputValue.startsWith('https://')) {
+                        url = 'https://' + inputValue;
+                    }
+                    navigateToUrl(url);
+                } else {
+                    performSearch(inputValue);
+                }
+            }
+        });
+
+        backBtn.addEventListener('click', () => {
+            const tab = getActiveTab();
+            if (tab && !tab.isHome && tab.webview.canGoBack()) {
+                tab.webview.goBack();
+            }
+        });
+
+        forwardBtn.addEventListener('click', () => {
+            const tab = getActiveTab();
+            if (tab && !tab.isHome && tab.webview.canGoForward()) {
+                tab.webview.goForward();
+            }
+        });
+
+        refreshBtn.addEventListener('click', () => {
+            const tab = getActiveTab();
+            if (!tab || tab.isHome) return;
+
+            if (tab.isSearchResults && tab.lastSearchResults) {
+                performSearch(tab.lastSearchResults.query);
+            } else {
+                tab.webview.reload();
+            }
+        });
+
+        homeBtn.addEventListener('click', showHomeForTab);
+        newTabBtn.addEventListener('click', () => createTab());
+        bookmarkBtn.addEventListener('click', toggleBookmark);
 
         themeToggle.addEventListener('click', () => {
             isDarkMode = !isDarkMode;
             applyTheme(isDarkMode);
         });
 
-        // Card click navigation
-        const cards = document.querySelectorAll('.card');
-        const quickLinks = [
-            'https://wikipedia.org',
-            'https://github.com',
-            'https://stackoverflow.com',
-            'https://developer.mozilla.org',
-            'https://duckduckgo.com',
-            'https://news.ycombinator.com'
-        ];
+        // Panel toggles
+        bookmarksPanelBtn.addEventListener('click', () => {
+            historyPanel.classList.remove('active');
+            bookmarksPanel.classList.toggle('active');
+        });
 
-        cards.forEach((card, index) => {
+        historyBtn.addEventListener('click', () => {
+            bookmarksPanel.classList.remove('active');
+            historyPanel.classList.toggle('active');
+        });
+
+        document.getElementById('close-bookmarks').addEventListener('click', () => bookmarksPanel.classList.remove('active'));
+        document.getElementById('close-history').addEventListener('click', () => historyPanel.classList.remove('active'));
+        document.getElementById('clear-history').addEventListener('click', clearHistory);
+
+        // Card click navigation
+        document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('click', () => {
-                webview.src = quickLinks[index];
-                input.value = quickLinks[index];
-                showWebview();
+                let tab = getActiveTab();
+                
+                // Navigate to the card's URL
+                const url = card.dataset.url;
+                const fullUrl = url.startsWith('http') ? url : 'https://' + url;
+                
+                tab.isHome = false;
+                tab.isSearchResults = false;
+                homeView.style.display = 'none';
+                tab.webview.style.display = 'flex';
+                tab.webview.src = fullUrl;
+                
+                // Update input to show URL
+                input.value = fullUrl;
             });
         });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey) {
+                switch (e.key.toLowerCase()) {
+                    case 't':
+                        e.preventDefault();
+                        createTab();
+                        break;
+                    case 'w':
+                        e.preventDefault();
+                        if (activeTabId) closeTab(activeTabId);
+                        break;
+                    case 'l':
+                        e.preventDefault();
+                        input.focus();
+                        input.select();
+                        break;
+                    case 'tab':
+                        e.preventDefault();
+                        const currentIndex = tabs.findIndex(t => t.id === activeTabId);
+                        const nextIndex = e.shiftKey
+                            ? (currentIndex - 1 + tabs.length) % tabs.length
+                            : (currentIndex + 1) % tabs.length;
+                        switchToTab(tabs[nextIndex].id);
+                        break;
+                }
+            }
+            if (e.key === 'F5') {
+                e.preventDefault();
+                refreshBtn.click();
+            }
+        });
+
+        // Close panels when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!bookmarksPanel.contains(e.target) && !bookmarksPanelBtn.contains(e.target)) {
+                bookmarksPanel.classList.remove('active');
+            }
+            if (!historyPanel.contains(e.target) && !historyBtn.contains(e.target)) {
+                historyPanel.classList.remove('active');
+            }
+        });
+
+        // Initialize
+        applyTheme(isDarkMode);
+        renderBookmarks();
+        renderHistory();
+        createTab(); // Create initial tab
     </script>
 </body>
+
 </html>
